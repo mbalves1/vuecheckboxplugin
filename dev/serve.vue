@@ -6,12 +6,13 @@ export default Vue.extend({
   name: 'ServeDev',
   components: {
     VueCheckboxMb
-  }
+  },
+ 
 });
 </script>
 
 <template>
   <div id="app">
-    <vue-checkbox-mb />
+    <vue-checkbox-mb :dialog="muda" />
   </div>
 </template>

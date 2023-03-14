@@ -9,11 +9,6 @@
               Welcome to Vuetify
             </h1>
 
-            <p class="subheading font-weight-regular">
-              For help and collaboration with other Vuetify developers,
-              <br>please join our online
-              
-            </p>
             <div class="d-flex">
               <v-checkbox
                 class="d-flex"
@@ -24,7 +19,7 @@
                 <template v-slot:label>
                   <div class="d-flex align-center">
                     <span class="primary--text">Aceitos as </span>
-                    <v-dialog v-model="dialog" width="700">
+                    <v-dialog :v-model="dialog" width="700">
                       <template v-slot:activator="{ on }">
                         <a v-on="on">
                           <u> Politica</u>
@@ -310,8 +305,11 @@
       VContainer
     },
 
-    data: () => ({
-    }),
+    data() {
+      return {
+        internalDialog: this.dialog
+      }
+    },
 
     props: {
       datamodel: {
@@ -320,11 +318,18 @@
       dialog: {
         Type: Boolean,
         default: false
+      },
+      change: {
+        type: Function
       }
     },
 
     methods: {
+      openDialog() {
+        this.internalDialog = !this.internalDialog
+      },
       change($event) {
+        console.log('>>>>', $event)
         this.$emit('change', $event)
       }
     }
