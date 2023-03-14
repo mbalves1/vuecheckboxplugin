@@ -9,7 +9,7 @@ import replace from '@rollup/plugin-replace';
 import babel from '@rollup/plugin-babel';
 import { terser } from 'rollup-plugin-terser';
 import minimist from 'minimist';
-import postcss from 'rollup-plugin-postcss'
+import vuetify from 'rollup-plugin-vuetify'
 
 // Get browserslist config and remove ie from es build targets
 const esbrowserslist = fs.readFileSync('./.browserslistrc')
@@ -39,8 +39,8 @@ const baseConfig = {
       }),
     ],
     replace: {
-      preventAssignment: true,
       'process.env.NODE_ENV': JSON.stringify('production'),
+      'preventAssignment': true
     },
     vue: {
       css: true,
@@ -71,6 +71,8 @@ const external = [
   // list external dependencies, exactly the way it is written in the import statement.
   // eg. 'jquery'
   'vue',
+  'vuetify',
+  'vuetify/lib',
 ];
 
 // UMD/IIFE shared settings: output.globals
@@ -79,6 +81,8 @@ const globals = {
   // Provide global variable names to replace your external imports
   // eg. jquery: '$'
   vue: 'Vue',
+  vuetify: 'Vuetify',
+  'vuetify/lib': 'Vuetify',
 };
 
 // Customize configs for individual targets
@@ -110,6 +114,8 @@ if (!argv.format || argv.format === 'es') {
           ],
         ],
       }),
+      commonjs(),
+      vuetify(),
     ],
   };
   buildFormats.push(esConfig);
@@ -139,6 +145,8 @@ if (!argv.format || argv.format === 'cjs') {
       }),
       ...baseConfig.plugins.postVue,
       babel(baseConfig.plugins.babel),
+      commonjs(),
+      vuetify(),
     ],
   };
   buildFormats.push(umdConfig);
@@ -162,6 +170,8 @@ if (!argv.format || argv.format === 'iife') {
       vue(baseConfig.plugins.vue),
       ...baseConfig.plugins.postVue,
       babel(baseConfig.plugins.babel),
+      commonjs(),
+      vuetify(),
       terser({
         output: {
           ecma: 5,
